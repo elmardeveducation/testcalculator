@@ -1,125 +1,131 @@
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    View,
-    Text,
-    Button,
-    TextInput,
+import { View, Text, TouchableOpacity, TextInput, } from 'react-native'
+import { styles } from './styles/styles'
 
-} from 'react-native'
 
 export default class App extends Component {
-    state = {
-        num1: 0,
-        num2: 0,
-        operator: ""
+    constructor(props) {
+        super(props)
+        this.state = {
+            num1: "",
+            num2: "",
+            result: "",
+            operator: "",
+            op: "",
+        }
+
     }
+    getRes = () => {
+        console.log("state from getRes num1=" + this.state.num1)
+        console.log("state from getRes num1=" + this.state.num2)
+        console.log("state from getRes num1=" + this.state.op)
+        console.log("state from getRes num1=" + this.state.result)
+        let res = this.state.num1 + this.state.op + this.state.num2 + "=" + this.state.result
+        console.log("from getres res=" + res)
+        return res
+    }
+
+    parseVariable = (text) => {
+
+        return parseFloat(text)
+    }
+    calculator(operator) {
+        let num3 = this.parseVariable(this.state.num1)
+        let num4 = this.parseVariable(this.state.num2)
         
-    caculator(operator) {
+        //console.log(num3 + "= result")
+        //console.log(num4 + "= result")
         switch (operator) {
+
             case "+":
-                return num1 + num2
+                this.setState({ result: num3 + num4 })
+                console.log("Sum is from case ++++ " + this.state.result)
+                // console.log("Operator is " + this.operator)
+                this.setState({ op: "+" })
+                console.log("operator is " + this.state.op)
+                return this.state.result
 
             case "-":
-                return num1 - num2
+                this.setState({ result: num3 - num4 })
+                this.setState({ op: "-" })
+                return this.state.result
 
             case "*":
-                return num1 * num2
+                this.setState({ result: num3 * num4 })
+                this.setState({ op: "*" })
+                return this.state.result
 
             case "/":
-                if (num2) {
-                    return num1 / num2
+                if (num4 !== 0) {
+                    this.setState({ result: num3 / num4 })
+                    this.setState({ op: "/" })
+                    return this.state.result
                 } else {
-                    return num1 / num2
+                    this.setState({ result: "ERROR!!" })
+                    return this.state.result
                 }
-
+            case "%":
+                this.setState({ result: (num3 / 100) * num4 })
+                this.setState({ op: "%" })
+                return this.state.result
             default:
                 return 0
         }
     }
 
-    showCalc(){
-
-
-    }
-
     render() {
-        console.log(this.state.num1)
         return (
-
             <View style={styles.container}>
-                <View style={styles.container1}>
-                    <TextInput style={styles.resultText} onChangeText={(text) => this.setState({text})}   value={this.setState.num1}></TextInput>
-                    <TextInput style={styles.resultText} onChangeText={(text) => this.setState({text})}   value={this.setState.num2}></TextInput>
-                    <Text style={styles.texts}>0</Text>
+                <View style={{ flex: 2 }}></View>
+                <View style={styles.viewInput}>
+                    <TextInput
+                        style={styles.textInput}
+                        keyboardType={'numeric'}
+                        onChangeText={(num1) => this.setState({ num1 })}
+                        value={this.state.num1}
+                    >
+                    </TextInput>
                 </View>
-                <View  style={styles.container2}>
-                    <Button title="+" style={styles.btn} onPress={text=>this.caculator(text)}></Button>
-                    <Button title="-" style={styles.btn}></Button>
-                    <Button title="*" style={styles.btn}></Button>
-                    <Button title="/" style={styles.btn}></Button>
+                <View style={styles.viewInputTwo}>
+                    <TextInput
+                        style={styles.textInput}
+                        keyboardType={'numeric'}
+                        onChangeText={(num2) => this.setState({ num2 })}
+                        value={this.state.num2}
+                    >
+                    </TextInput>
                 </View>
-               <View style={styles.container3}></View>
-               <View style={styles.container4}></View>
+                <View style={styles.viewBtn}>
+                    <TouchableOpacity
+                        style={styles.touchableBtnLeft}
+                        onPress={() => this.calculator("+")}>
+                        <Text>+</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.touchableBtn}
+                        onPress={() => this.calculator("-")}>
+                        <Text>-</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.touchableBtn}
+                        onPress={() => this.calculator("*")}>
+                        <Text>*</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.touchableBtnRight}
+                        onPress={() => this.calculator("/")}>
+                        <Text>/</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.viewResult}>
+                    <Text
+                        style={styles.resultText}
+                    >{this.getRes()}</Text>
+
+                </View>
+                <View style={{ flex: 7 }}>
+                </View>
             </View>
         )
-
-
     }
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, 
-    },
-    container1:{
-        flex: 1,
-        justifyContent: "center",
-        flexDirection: "row",
-    },
-    container2:{
-        flex: 2,
-        flexDirection:"row",
-        justifyContent: 'space-evenly',
-        alignItems:'center',
-        padding: 100
-    },
-    container3:{
-        flex: 3,
-        justifyContent: "center",
-        flexDirection: "row",
-    },
-    container4:{
-        flex: 4,
-        justifyContent: "center",
-        flexDirection: "row",
-    },
-    resultText: {
-        height: 40,
-        width: 100,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginTop: 30,
-        margin: 10,
-        fontSize: 20,
-        textAlign: "right",
-    },
-    texts: {
-
-        height: 40,
-        width: 100,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginTop: 30,
-        margin: 10,
-        textAlign: "right",
-        fontSize: 20
-    },
-    btn: {
-        height: 60,
-        width: 60,
-        fontSize: 30,
-
-    }
-});		
